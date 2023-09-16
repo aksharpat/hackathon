@@ -76,6 +76,7 @@ def crop_image(image):
     cv.waitKey(0)
     cv.destroyAllWindows()
     ###
+    return image
 
 
 def clean_image(image):
