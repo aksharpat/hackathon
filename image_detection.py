@@ -1,7 +1,7 @@
 import cv2
 
 # Load the image
-image = cv2.imread("thomp_bread.jpg")
+image = cv2.imread("thomp2.jpg")
 
 # Convert the image to grayscale
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -40,7 +40,7 @@ for contour in contours:
 
 # Display or save the cropped objects
 for i, cropped_object in enumerate(cropped_objects):
-    cv2.imshow(f"Cropped Object {i}", cropped_object)
+    # cv2.imshow(f"Cropped Object {i}", cropped_object)
     cv2.imwrite(f"cropped_object_{i}.jpg", cropped_object)
 
 # Display the original image with rectangles (optional)
