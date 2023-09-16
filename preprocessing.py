@@ -10,7 +10,7 @@ def process_image(image_path):
     cropped_image = crop_image(image)
 
     # Cleans/sharpens the image
-    cleaned_image = clean_image(image)
+    cleaned_image = clean_image(cropped_image)
 
     # TODO: Replace this with cleaned_image. Use cropped_image for testing
     cv.imshow(cropped_image)
@@ -40,3 +40,4 @@ def clean_image(image):
 
 if __name__ == "__main__":
     image_path = "breadboard.jpg"
+    process_image(image_path)
