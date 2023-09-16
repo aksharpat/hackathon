@@ -1,7 +1,7 @@
 import cv2
 
 # reading image
-image = cv2.imread("breadboard.jpg")
+image = cv2.imread("thomp_bread.jpg")
 
 # converting to gray scale
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -18,5 +18,5 @@ for c in cnts:
         idx += 1
         new_img = image[y : y + h, x : x + w]
 cv2.imwrite("cropped_breadboard.jpg", new_img)
-cv2.imshow("Original Image", new_img)
+cv2.imshow("new image", new_img)
 cv2.waitKey(0)
