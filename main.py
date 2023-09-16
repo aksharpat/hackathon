@@ -47,7 +47,7 @@ class MainWindow(QtWidgets.QMainWindow):
         default_image = QtGui.QPixmap("default_breadboard.jpg")
         self.image_label.setPixmap(default_image)
         self.image_label.setScaledContents(True)
-        self.image_label.setFixedSize(400, 400)
+        self.image_label.setFixedSize(800, 800)
         layout.addWidget(self.image_label)
 
         # Analyze Circuit Button
