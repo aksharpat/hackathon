@@ -1,33 +1,53 @@
 import cv2
-import numpy as np
 
 # Load the image
-image = cv2.imread("breadboard.jpg")
+image = cv2.imread("thomp_bread.jpg")
 
 # Convert the image to grayscale
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-# Apply Gaussian blur to reduce noise and enhance contours
-blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+# Apply a binary threshold or any other suitable preprocessing
+_, thresh = cv2.threshold(gray, 128, 255, cv2.THRESH_BINARY)
 
-# Perform edge detection
-edges = cv2.Canny(blurred, threshold1=30, threshold2=100)
-cv2.imshow("edge Breadboard", edges)
-# Find contours in the edge-detected image
-contours, _ = cv2.findContours(edges.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+# Find contours in the binary image
+contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-# Sort the contours by area in descending order and keep the largest one
-contours = sorted(contours, key=cv2.contourArea, reverse=True)[:1]
+# Initialize a list to store cropped objects
+cropped_objects = []
 
-# Create a mask for the largest contour
-mask = np.zeros_like(gray)
-cv2.drawContours(mask, contours, -1, (255), thickness=cv2.FILLED)
+# Set minimum contour area and aspect ratio thresholds
+min_contour_area = 1000  # Adjust this value as needed
+min_aspect_ratio = 0.3  # Adjust this value as needed
 
-# Bitwise-AND the mask with the original image to extract the breadboard region
-breadboard_only = cv2.bitwise_and(image, image, mask=mask)
+# Iterate through the detected contours
+for contour in contours:
+    # Calculate the contour area
+    contour_area = cv2.contourArea(contour)
 
-# Save or display the cropped breadboard image
-cv2.imwrite("cropped_breadboard.jpg", breadboard_only)
-# cv2.imshow("Cropped Breadboard", breadboard_only)
+    # Calculate the bounding rectangle for the contour
+    x, y, w, h = cv2.boundingRect(contour)
+
+    # Calculate the aspect ratio of the bounding rectangle
+    aspect_ratio = float(w) / h
+
+    # Filter contours based on area and aspect ratio
+    if contour_area > min_contour_area and aspect_ratio > min_aspect_ratio:
+        # Crop the object from the original image
+        cropped_object = image[y : y + h, x : x + w]
+
+        # Append the cropped object to the list
+        cropped_objects.append(cropped_object)
+
+# Display or save the cropped objects
+for i, cropped_object in enumerate(cropped_objects):
+    cv2.imshow(f"Cropped Object {i}", cropped_object)
+    cv2.imwrite(f"cropped_object_{i}.jpg", cropped_object)
+
+# Display the original image with rectangles (optional)
+for contour in contours:
+    x, y, w, h = cv2.boundingRect(contour)
+    cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+cv2.imshow("Object Detection", image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
