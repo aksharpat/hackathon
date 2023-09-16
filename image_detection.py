@@ -12,7 +12,7 @@ blurred = cv2.GaussianBlur(gray, (5, 5), 0)
 
 # Perform edge detection
 edges = cv2.Canny(blurred, threshold1=30, threshold2=100)
-cv2.imshow("edge Breadboard", edges)
+
 # Find contours in the edge-detected image
 contours, _ = cv2.findContours(edges.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
@@ -21,6 +21,7 @@ contours = sorted(contours, key=cv2.contourArea, reverse=True)[:1]
 
 # Create a mask for the largest contour
 mask = np.zeros_like(gray)
+print(mask)
 cv2.drawContours(mask, contours, -1, (255), thickness=cv2.FILLED)
 
 # Bitwise-AND the mask with the original image to extract the breadboard region
@@ -28,6 +29,6 @@ breadboard_only = cv2.bitwise_and(image, image, mask=mask)
 
 # Save or display the cropped breadboard image
 cv2.imwrite("cropped_breadboard.jpg", breadboard_only)
-# cv2.imshow("Cropped Breadboard", breadboard_only)
+cv2.imshow("Cropped Breadboard", edges)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
