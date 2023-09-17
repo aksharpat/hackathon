@@ -15,39 +15,38 @@ def generateDiagram(circuitGraph, vcc: str):
             # Each node should be a component name (RES, CAP, RAIL, etc) followed by a unique identifier
             # followed by a value (if the node is a component with a resistance or other value to be labeled)
             args = node.split(' ')
-            match args[0]:
-                case 'POW':
+            if args[0] == 'POW':
                     d += elm.Vdd().right().label(vcc)
                     d.push()
                     
-                case 'RAIL':
-                    d += elm.Line().down()
-                    d.push()
+            elif args[0] == 'RAIL':
+                d += elm.Line().down()
+                d.push()
 
-                case 'RES':
-                    if not len(args) == 3:
-                        print("Invalid Resistor node:", node)
-                        return None
-                    d += elm.Resistor().down().label(args[2])
-                    d.push()
-
-                case 'CAP':
-                    if not len(args) == 3:
-                        print("Invalid Capacitor node:", node)
-                        return None
-                    d += elm.Capacitor().down().label(args[2])
-                    d.push()
-
-                case 'IND':
-                    if not len(args) == 3:
-                        print("Invalid Inductor node:", node)
-                        return None
-                    d += elm.Inductor().down().label(args[2])
-                    d.push()
-
-                case _:
-                    print("Unknown node:", node)
+            elif args[0] == 'RES':
+                if not len(args) == 3:
+                    print("Invalid Resistor node:", node)
                     return None
+                d += elm.Resistor().down().label(args[2])
+                d.push()
+
+            elif args[0] == 'CAP':
+                if not len(args) == 3:
+                    print("Invalid Capacitor node:", node)
+                    return None
+                d += elm.Capacitor().down().label(args[2])
+                d.push()
+
+            elif args[0] == 'IND':
+                if not len(args) == 3:
+                    print("Invalid Inductor node:", node)
+                    return None
+                d += elm.Inductor().down().label(args[2])
+                d.push()
+
+            else:
+                print("Unknown node:", node)
+                return None
             
         # now to handle all of the branches of this main line :D
         #tracker variables for farthest left and right distance from main line
