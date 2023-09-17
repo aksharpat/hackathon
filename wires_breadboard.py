@@ -26,21 +26,19 @@ def non_max_suppression(rectangles, min_distance):
 
 
 # Load the breadboard image
-breadboard_image = cv2.imread("temp/cropped_object_0.jpg")
+breadboard_image = cv2.imread("imgs/breadboard10.jpg")
 
 # Create a list of template images
 template_paths = [
     "resources/template10.jpg",
     "resources/template11.jpg",
-    "resources/template12.jpg",
-    "resources/template13.jpg",
     "resources/template14.jpg",
     "resources/template15.jpg",
     "resources/template16.jpg",
     "resources/template17.jpg",
-    "resources/template18.jpg",
-    "resources/template19.jpg",
-]
+    "resources/template20.jpg",
+    "resources/template21.jpg",
+]  # Add paths to your templates
 
 # Set a threshold to determine matching locations
 threshold = 0.77  # Adjust this threshold as needed
@@ -71,7 +69,7 @@ detected_holes_positions = non_max_suppression(
 )
 
 # Load the image
-image = cv2.imread("temp/cropped_object_0.jpg")
+image = cv2.imread("imgs/breadboard10.jpg")
 
 # Convert the image to HSV color space
 hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
@@ -103,7 +101,7 @@ for contour in contours:
 
         # Convert the coordinates to integers and adjust them
         box = np.int0(box)
-        box[:, 0] -= 10  # Adjust left (x-coordinate)
+        box[:, 0] -= 50  # Adjust left (x-coordinate)
         box[:, 1] -= 10  # Adjust up (y-coordinate)
 
         # Add the adjusted bounding box to the green_object_boxes list
@@ -115,12 +113,34 @@ for coordinates in detected_holes_positions:
     plt.scatter(coordinates[0], coordinates[1], c="red", marker="o", s=10)
 
 for box in green_object_boxes:
-    poly = plt.Polygon(box, closed=True, fill=None, edgecolor="g", linestyle="--")
-    plt.gca().add_patch(poly)
+    # Calculate the midpoint of the bounding box
+    mid_x = np.mean(box[:, 0])
+    mid_y = np.mean(box[:, 1])
 
-plt.title("Detected Holes and Green Objects with Bounding Boxes")
+    # Calculate the direction of the diagonal line
+    dx = box[2][0] - box[0][0]
+    dy = box[2][1] - box[0][1]
+
+    # Normalize the direction vector
+    length = np.sqrt(dx**2 + dy**2)
+    dx /= length
+    dy /= length
+
+    # Calculate the starting and ending points for the line along the middle of the box
+    line_length = (
+        min(np.linalg.norm(box[0] - box[2]), np.linalg.norm(box[1] - box[3])) / 2
+    )
+    x1 = mid_x - dx * line_length
+    y1 = mid_y - dy * line_length
+    x2 = mid_x + dx * line_length
+    y2 = mid_y + dy * line_length
+
+    # Create a line for the bounding box middle
+    plt.plot([x1, x2], [y1, y2], color="g", linestyle="--", linewidth=2)
+
+plt.title("Detected Holes and Green Objects with Bounding Lines")
 plt.xlabel("X-coordinate")
 plt.ylabel("Y-coordinate")
-plt.gca().invert_yaxis()  # Invert the y-axis to match image coordinates (0,0 at top-left)
+plt.gca().invert_yaxis()
 plt.grid(True)
 plt.show()
