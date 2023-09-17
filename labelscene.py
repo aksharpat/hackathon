@@ -8,6 +8,7 @@ from PySide2.QtWidgets import (
     QFileDialog,
     QMessageBox,
 )
+from components import ElectronicComponent
 
 
 class LabelSceneWindow(QtWidgets.QDialog):
@@ -15,7 +16,7 @@ class LabelSceneWindow(QtWidgets.QDialog):
     Handles the dialog for loading batches and jobs.
     """
 
-    def __init__(self, components: list, parent=None):
+    def __init__(self, components: list[ElectronicComponent], parent=None):
         super().__init__(parent)
         self.init_ui()
 
