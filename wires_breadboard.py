@@ -144,3 +144,40 @@ plt.ylabel("Y-coordinate")
 plt.gca().invert_yaxis()
 plt.grid(True)
 plt.show()
+
+green_object_lines = []
+
+for box in green_object_boxes:
+    # Calculate the midpoint of the bounding box
+    mid_x = np.mean(box[:, 0])
+    mid_y = np.mean(box[:, 1])
+
+    # Calculate the direction of the diagonal line
+    dx = box[2][0] - box[0][0]
+    dy = box[2][1] - box[0][1]
+
+    # Normalize the direction vector
+    length = np.sqrt(dx**2 + dy**2)
+    dx /= length
+    dy /= length
+
+    # Calculate the starting and ending points for the line along the middle of the box
+    line_length = (
+        min(np.linalg.norm(box[0] - box[2]), np.linalg.norm(box[1] - box[3])) / 2
+    )
+    x1 = mid_x - dx * line_length
+    y1 = mid_y - dy * line_length
+    x2 = mid_x + dx * line_length
+    y2 = mid_y + dy * line_length
+
+    # Append the start and end points as a pair to the green_object_lines list
+    green_object_lines.append([(x1, y1), (x2, y2)])
+
+# Convert the green_object_lines list to a NumPy array
+green_object_lines = np.array(green_object_lines)
+
+# Now, the green_object_lines NumPy array contains pairs of coordinates for the start and end points
+
+first_green_object_line = green_object_lines[0]
+print("Coordinates of the first green object's line:")
+print(first_green_object_line)
