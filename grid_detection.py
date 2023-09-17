@@ -2,13 +2,16 @@ import cv2
 import numpy as np
 
 # Load the breadboard image
-breadboard_image = cv2.imread('breadboard8.jpg')
+breadboard_image = cv2.imread('imgs/breadboard10.jpg')
 
 # Create a list of template images
-template_paths = ['template10.jpg','template11.jpg','template12.jpg','template13.jpg','template14.jpg','template15.jpg','template16.jpg','template17.jpg']  # Add paths to your templates
+template_paths = ['resources/template10.jpg','resources/template11.jpg',
+                  'resources/template14.jpg','resources/template15.jpg',
+                  'resources/template16.jpg','resources/template17.jpg',
+                  'resources/template20.jpg','resources/template21.jpg',]  # Add paths to your templates
 
 # Set a threshold to determine matching locations
-threshold = 0.75  # Adjust this threshold as needed
+threshold = 0.77  # Adjust this threshold as needed
 detected_holes_positions = []
 
 # Iterate through each template

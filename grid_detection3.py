@@ -37,21 +37,17 @@ def adjust_rows(rows):
     return adjusted_rows
 
 
-breadboard_image = cv2.imread("imgs/breadboard7.jpg")
-template_paths = [
-    "resources/template10.jpg",
-    "resources/template11.jpg",
-    "resources/template12.jpg",
-    "resources/template13.jpg",
-    "resources/template14.jpg",
-    "resources/template15.jpg",
-    "resources/template16.jpg",
-    "resources/template17.jpg",
-    "resources/template18.jpg",
-    "resources/template19.jpg",
-]
+# Load the breadboard image
+breadboard_image = cv2.imread('imgs/breadboard10.jpg')
 
-threshold = 0.77
+# Create a list of template images
+template_paths = ['resources/template10.jpg','resources/template11.jpg',
+                  'resources/template14.jpg','resources/template15.jpg',
+                  'resources/template16.jpg','resources/template17.jpg',
+                  'resources/template20.jpg','resources/template21.jpg',]  # Add paths to your templates
+
+# Set a threshold to determine matching locations
+threshold = 0.77  # Adjust this threshold as needed
 min_distance = 50
 detected_holes_positions = []
 
