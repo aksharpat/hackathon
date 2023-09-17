@@ -26,21 +26,21 @@ def non_max_suppression(rectangles, min_distance):
 
 
 # Load the breadboard image
-breadboard_image = cv2.imread("cropped_object_0.jpg")
+breadboard_image = cv2.imread("temp/cropped_object_0.jpg")
 
 # Create a list of template images
 template_paths = [
-    "template10.jpg",
-    "template11.jpg",
-    "template12.jpg",
-    "template13.jpg",
-    "template14.jpg",
-    "template15.jpg",
-    "template16.jpg",
-    "template17.jpg",
-    "template18.jpg",
-    "template19.jpg",
-]  # Add paths to your templates
+    "resources/template10.jpg",
+    "resources/template11.jpg",
+    "resources/template12.jpg",
+    "resources/template13.jpg",
+    "resources/template14.jpg",
+    "resources/template15.jpg",
+    "resources/template16.jpg",
+    "resources/template17.jpg",
+    "resources/template18.jpg",
+    "resources/template19.jpg",
+]
 
 # Set a threshold to determine matching locations
 threshold = 0.77  # Adjust this threshold as needed
@@ -71,7 +71,7 @@ detected_holes_positions = non_max_suppression(
 )
 
 # Load the image
-image = cv2.imread("cropped_object_0.jpg")
+image = cv2.imread("temp/cropped_object_0.jpg")
 
 # Convert the image to HSV color space
 hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
