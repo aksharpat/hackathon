@@ -8,7 +8,9 @@ from PySide2.QtWidgets import (
     QFileDialog,
     QMessageBox,
 )
+from components import ElectronicComponent
 from preprocessing import process_image
+from labelscene import LabelSceneWindow
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -81,7 +83,17 @@ class MainWindow(QtWidgets.QMainWindow):
         Opens the component picker window.
         """
         self.clean_image = process_image(self.image_filename)
-        # TODO: Image analysis
+        # This is for demonstration purposes.
+        demo_components = [
+            ElectronicComponent(name="VCC", type="POW"),
+            ElectronicComponent(name="RES 1", type="RES"),
+            ElectronicComponent(name="RES 2", type="RES"),
+            ElectronicComponent(name="CAP 1", type="CAP"),
+            ElectronicComponent(name="CAP 2", type="CAP"),
+        ]
+        labelscene_dialog = LabelSceneWindow(demo_components, self)
+        labelscene_dialog.showMaximized()
+        labelscene_dialog.exec_()
 
     def resizeEvent(self, event):
         if hasattr(self, "image_label"):
