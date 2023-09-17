@@ -46,7 +46,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Label for displaying image
         self.image_label = QLabel(self)
-        default_image = QtGui.QPixmap("default_breadboard.jpg")
+        default_image = QtGui.QPixmap("resources/default_breadboard.jpg")
         self.image_label.setPixmap(default_image)
         self.image_label.setScaledContents(True)
         self.image_label.setFixedSize(800, 800)
@@ -75,15 +75,13 @@ class MainWindow(QtWidgets.QMainWindow):
             self.analyze_btn.setEnabled(True)  # Enable the analyze button
 
     def analyze_circuit(self):
-        # TODO: Implement the actual analysis
-        QMessageBox.information(
-            self, "Analysis", "Circuit analysis will be implemented here!"
-        )
+        """
+        Cleans and analyzes the selected image.
+        Triggered by a press of "Analyze Circuit".
+        Opens the component picker window.
+        """
         self.clean_image = process_image(self.image_filename)
-
-        # cv.imshow("Cropped image", self.clean_image)
-        # cv.waitKey(0)
-        # cv.destroyAllWindows
+        # TODO: Image analysis
 
     def resizeEvent(self, event):
         if hasattr(self, "image_label"):

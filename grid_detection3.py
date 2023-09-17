@@ -37,21 +37,17 @@ def adjust_rows(rows):
     return adjusted_rows
 
 
-breadboard_image = cv2.imread("imgs/breadboard7.jpg")
-template_paths = [
-    "resources/template10.jpg",
-    "resources/template11.jpg",
-    "resources/template12.jpg",
-    "resources/template13.jpg",
-    "resources/template14.jpg",
-    "resources/template15.jpg",
-    "resources/template16.jpg",
-    "resources/template17.jpg",
-    "resources/template18.jpg",
-    "resources/template19.jpg",
-]
+# Load the breadboard image
+breadboard_image = cv2.imread('imgs/breadboard10.jpg')
 
-threshold = 0.77
+# Create a list of template images
+template_paths = ['resources/template10.jpg','resources/template11.jpg',
+                  'resources/template14.jpg','resources/template15.jpg',
+                  'resources/template16.jpg','resources/template17.jpg',
+                  'resources/template20.jpg','resources/template21.jpg',]  # Add paths to your templates
+
+# Set a threshold to determine matching locations
+threshold = 0.77  # Adjust this threshold as needed
 min_distance = 50
 detected_holes_positions = []
 
@@ -91,20 +87,57 @@ max_y = np.max(y_values)
 width = max_x - min_x
 height = max_y - min_y
 
-print("Length of the Entire Grid:", width)
-print("Width of the Entire Grid:", height)
+with open('resources/holemap_small.pkl', 'rb') as file:
+    neat_array = pickle.load(file)
 
+
+
+# Calculate the aspect ratio of neat_array
+neat_aspect_ratio = width / height  # Assuming width and height are the dimensions of neat_array
+
+# Calculate the aspect ratio of detected_holes_array
+detected_aspect_ratio = (max_x - min_x) / (max_y - min_y)
+# Determine the scaling factor based on aspect ratios
+if detected_aspect_ratio < neat_aspect_ratio:
+    # detected_holes_array is narrower, scale its height to match neat_array
+    scale_factor = (max_x - min_x) / width
+else:
+    # detected_holes_array is wider, scale its width to match neat_array
+    scale_factor = (max_y - min_y) / height
+
+# Calculate the dimensions of the scaled detected holes array
+scaled_width = max_x - min_x
+scaled_height = max_y - min_y
+
+# Print the dimensions of both arrays
+print("Dimensions of Neat Array (width x height):", width, "x", height)
+print("Dimensions of Scaled Detected Holes Array (width x height):", scaled_width, "x", scaled_height)
+
+# Scale the coordinates of detected_holes_array
+scaled_detected_holes_array = detected_holes_array * .95
+print(scale_factor)
+# Calculate the centroid of both arrays
+neat_centroid = np.mean(neat_array, axis=0)
+detected_holes_centroid = np.mean(scaled_detected_holes_array, axis=0)
+
+# Calculate the offset needed to align the centroids
+offset = neat_centroid - detected_holes_centroid
+
+# Shift the scaled_detected_holes_array by the calculated offset
+aligned_scaled_detected_holes_array = scaled_detected_holes_array + offset
+print(offset)
+# Create a scatter plot to visualize the aligned arrays
 plt.figure(figsize=(8, 6))
 plt.scatter(
-    detected_holes_array[:, 0], detected_holes_array[:, 1], c="red", marker="o", s=10
+    aligned_scaled_detected_holes_array[:, 0], aligned_scaled_detected_holes_array[:, 1], c="red", marker="o", s=10, label="Aligned Detected Holes"
 )
-plt.title("Detected Holes")
+plt.scatter(
+    neat_array[:, 0], neat_array[:, 1], c="blue", marker="x", s=10, label="Neat Array"
+)
+plt.title("Aligned Detected Holes and Neat Array")
 plt.xlabel("X-coordinate")
 plt.ylabel("Y-coordinate")
 plt.gca().invert_yaxis()
 plt.grid(True)
+plt.legend()
 plt.show()
-
-# Save detected_holes_array into a pickle file
-with open("resources/holemap_small.pkl", "wb") as file:
-    pickle.dump(detected_holes_array, file)
