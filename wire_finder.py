@@ -93,11 +93,7 @@ for contour in green_objects:
 
     # Label the bounding box with "wire" (larger font size)
     font = cv2.FONT_HERSHEY_SIMPLEX
-<<<<<<< HEAD
     org = (box[0][0] + 100, box[0][1] + 103)  # Adjust the position for the label
-=======
-    org = (box[0][0] - 1000, box[0][1] - 130)  # Adjust the position for the label
->>>>>>> c02bd23d65208baeee29733f0513e2ca6744d04c
     font_scale = 3.0  # Increase the font size further
     font_color = (0, 0, 255)  # Green color
     font_thickness = 13  # Increase the font thickness for better visibility
@@ -109,11 +105,7 @@ for contour in green_objects:
     temp_coord = (pt1, pt2)
     cv2.putText(
         image,
-<<<<<<< HEAD
         "wire",
-=======
-        f"wire {temp_coord}",
->>>>>>> c02bd23d65208baeee29733f0513e2ca6744d04c
         org,
         font,
         font_scale,
