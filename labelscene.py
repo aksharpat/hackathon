@@ -12,6 +12,7 @@ from PySide2.QtWidgets import (
     QHBoxLayout,
 )
 from components import ElectronicComponent
+from circuit_gen import generateDiagram
 
 
 class LabelSceneWindow(QtWidgets.QDialog):
@@ -70,14 +71,34 @@ class LabelSceneWindow(QtWidgets.QDialog):
         self.setLayout(main_layout)
 
     def generate_schematic(self):
-        # Check if all inputs are filled
+        # First, check if all inputs are filled
         if any([input.text() == "" for input in self.inputs]):
             QMessageBox.warning(
                 self, "Warning", "You must fill out all component values"
             )
-        else:
-            # Implement the rest of the functionality here
-            pass
+            return
+
+        # Create the demo_graph based on the user input
+        demo_graph = {
+            "POW": ["RAIL 1"],
+            "RAIL 1": ["POW", f"RES 1 {self.inputs[1].text()}Ω"],
+            f"RES 1 {self.inputs[2].text()}Ω": ["RAIL 1", "RAIL 2"],
+            "RAIL 2": [
+                f"RES 1 {self.inputs[1].text()}Ω",
+                f"RES 2 {self.inputs[2].text()}Ω",
+            ],
+            f"RES 2 {self.inputs[2].text()}Ω": ["RAIL 2", "RAIL 3"],
+            f"CAP 1 {self.inputs[3].text()}F": ["RAIL 4", "RAIL 5"],
+            f"CAP 2 {self.inputs[3].text()}F": ["RAIL 6", "RAIL 7"],
+            "RAIL 3": [f"RES 2 {self.inputs[2].text()}Ω", "GND"],
+            "GND": ["RAIL 3"],
+        }
+
+        print(demo_graph, self.inputs[0].text())
+
+        generateDiagram(
+            demo_graph, f"self.inputs[0].text()V"
+        )  # Passing VCC's value (i.e., 3.3V, 5V, etc.)
 
 
 def main():
