@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 import pickle
+from scipy.spatial import KDTree
 
 Y_THRESH = 25  # Threshold distance to determine if two holes belong to the same row
 # TODO: better way of doing this.
@@ -38,13 +39,19 @@ def adjust_rows(rows):
 
 
 # Load the breadboard image
-breadboard_image = cv2.imread('imgs/breadboard10.jpg')
+breadboard_image = cv2.imread("imgs/breadboard10.jpg")
 
 # Create a list of template images
-template_paths = ['resources/template10.jpg','resources/template11.jpg',
-                  'resources/template14.jpg','resources/template15.jpg',
-                  'resources/template16.jpg','resources/template17.jpg',
-                  'resources/template20.jpg','resources/template21.jpg',]  # Add paths to your templates
+template_paths = [
+    "resources/template10.jpg",
+    "resources/template11.jpg",
+    "resources/template14.jpg",
+    "resources/template15.jpg",
+    "resources/template16.jpg",
+    "resources/template17.jpg",
+    "resources/template20.jpg",
+    "resources/template21.jpg",
+]  # Add paths to your templates
 
 # Set a threshold to determine matching locations
 threshold = 0.77  # Adjust this threshold as needed
@@ -87,13 +94,14 @@ max_y = np.max(y_values)
 width = max_x - min_x
 height = max_y - min_y
 
-with open('resources/holemap_small.pkl', 'rb') as file:
+with open("resources/holemap_small.pkl", "rb") as file:
     neat_array = pickle.load(file)
 
 
-
 # Calculate the aspect ratio of neat_array
-neat_aspect_ratio = width / height  # Assuming width and height are the dimensions of neat_array
+neat_aspect_ratio = (
+    width / height
+)  # Assuming width and height are the dimensions of neat_array
 
 # Calculate the aspect ratio of detected_holes_array
 detected_aspect_ratio = (max_x - min_x) / (max_y - min_y)
@@ -111,10 +119,15 @@ scaled_height = max_y - min_y
 
 # Print the dimensions of both arrays
 print("Dimensions of Neat Array (width x height):", width, "x", height)
-print("Dimensions of Scaled Detected Holes Array (width x height):", scaled_width, "x", scaled_height)
+print(
+    "Dimensions of Scaled Detected Holes Array (width x height):",
+    scaled_width,
+    "x",
+    scaled_height,
+)
 
 # Scale the coordinates of detected_holes_array
-scaled_detected_holes_array = detected_holes_array * .95
+scaled_detected_holes_array = detected_holes_array * 0.95
 print(scale_factor)
 # Calculate the centroid of both arrays
 neat_centroid = np.mean(neat_array, axis=0)
@@ -126,10 +139,34 @@ offset = neat_centroid - detected_holes_centroid
 # Shift the scaled_detected_holes_array by the calculated offset
 aligned_scaled_detected_holes_array = scaled_detected_holes_array + offset
 print(offset)
+
+# ---------- KDTree Grid Shifting --------------
+
+# Create a KDTree from the neat array
+tree = KDTree(neat_array)
+
+# For each point in the aligned_scaled_detected_holes_array,
+# find the nearest neighbor in the neat_array
+dists, idxs = tree.query(aligned_scaled_detected_holes_array)
+
+# Compute the shifts required to align each point from
+# aligned_scaled_detected_holes_array to its nearest neighbor
+shifts = neat_array[idxs] - aligned_scaled_detected_holes_array
+
+# Apply the shifts to the points in aligned_scaled_detected_holes_array
+aligned_scaled_detected_holes_array += shifts
+
+# ----------------------------------------------
+
 # Create a scatter plot to visualize the aligned arrays
 plt.figure(figsize=(8, 6))
 plt.scatter(
-    aligned_scaled_detected_holes_array[:, 0], aligned_scaled_detected_holes_array[:, 1], c="red", marker="o", s=10, label="Aligned Detected Holes"
+    aligned_scaled_detected_holes_array[:, 0],
+    aligned_scaled_detected_holes_array[:, 1],
+    c="red",
+    marker="o",
+    s=10,
+    label="Aligned Detected Holes",
 )
 plt.scatter(
     neat_array[:, 0], neat_array[:, 1], c="blue", marker="x", s=10, label="Neat Array"
