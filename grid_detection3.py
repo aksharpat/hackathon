@@ -24,11 +24,13 @@ def non_max_suppression(rectangles, min_distance):
     return picked_rectangles
 
 # Load the breadboard image
-breadboard_image = cv2.imread('breadboard9.jpg')
+breadboard_image = cv2.imread('imgs/breadboard7.jpg')
 
 # Create a list of template images
-template_paths = ['template10.jpg','template11.jpg','template12.jpg','template13.jpg','template14.jpg','template15.jpg','template16.jpg','template17.jpg']  # Add paths to your templates
-
+template_paths = ['resources/template10.jpg','resources/template11.jpg','resources/template12.jpg',
+                  'resources/template13.jpg','resources/template14.jpg','resources/template15.jpg',
+                  'resources/template16.jpg','resources/template17.jpg','resources/template18.jpg'
+                  ,'resources/template19.jpg']  # Add paths to your templates
 
 # Set a threshold to determine matching locations
 threshold = 0.77  # Adjust this threshold as needed
