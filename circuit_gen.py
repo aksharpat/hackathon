@@ -44,6 +44,9 @@ def generateDiagram(circuitGraph, vcc: str):
                 d += elm.Inductor().down().label(args[2])
                 d.push()
 
+            elif args[0] == 'GND':
+                    d += elm.Ground().right()
+
             else:
                 print("Unknown node:", node)
                 return None
