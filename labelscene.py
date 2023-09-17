@@ -82,14 +82,14 @@ class LabelSceneWindow(QtWidgets.QDialog):
         demo_graph = {
             "POW": ["RAIL 1"],
             "RAIL 1": ["POW", f"RES 1 {self.inputs[1].text()}Ω"],
-            f"RES 1 {self.inputs[2].text()}Ω": ["RAIL 1", "RAIL 2"],
+            f"RES 1 {self.inputs[1].text()}Ω": ["RAIL 1", "RAIL 2"],
             "RAIL 2": [
                 f"RES 1 {self.inputs[1].text()}Ω",
                 f"RES 2 {self.inputs[2].text()}Ω",
             ],
             f"RES 2 {self.inputs[2].text()}Ω": ["RAIL 2", "RAIL 3"],
             f"CAP 1 {self.inputs[3].text()}F": ["RAIL 4", "RAIL 5"],
-            f"CAP 2 {self.inputs[3].text()}F": ["RAIL 6", "RAIL 7"],
+            f"CAP 2 {self.inputs[4].text()}F": ["RAIL 6", "RAIL 7"],
             "RAIL 3": [f"RES 2 {self.inputs[2].text()}Ω", "GND"],
             "GND": ["RAIL 3"],
         }
@@ -97,7 +97,7 @@ class LabelSceneWindow(QtWidgets.QDialog):
         print(demo_graph, self.inputs[0].text())
 
         generateDiagram(
-            demo_graph, f"self.inputs[0].text()V"
+            demo_graph, f"{self.inputs[0].text()}V"
         )  # Passing VCC's value (i.e., 3.3V, 5V, etc.)
 
 
