@@ -1,3 +1,4 @@
+import cv2 as cv
 from PySide2 import QtWidgets, QtGui, QtCore
 from PySide2.QtWidgets import (
     QLabel,
@@ -7,6 +8,7 @@ from PySide2.QtWidgets import (
     QFileDialog,
     QMessageBox,
 )
+from preprocessing import process_image
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -61,12 +63,12 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def upload_image(self):
         options = QFileDialog.Options()
-        file_name, _ = QFileDialog.getOpenFileName(
+        self.image_filename, _ = QFileDialog.getOpenFileName(
             self, "Open Image", "", "Images (*.png *.xpm *.jpg)", options=options
         )
 
-        if file_name:
-            pixmap = QtGui.QPixmap(file_name)
+        if self.image_filename:
+            pixmap = QtGui.QPixmap(self.image_filename)
             self.image_label.setPixmap(
                 pixmap.scaled(self.image_label.size(), QtCore.Qt.KeepAspectRatio)
             )
@@ -77,6 +79,11 @@ class MainWindow(QtWidgets.QMainWindow):
         QMessageBox.information(
             self, "Analysis", "Circuit analysis will be implemented here!"
         )
+        self.clean_image = process_image(self.image_filename)
+
+        # cv.imshow("Cropped image", self.clean_image)
+        # cv.waitKey(0)
+        # cv.destroyAllWindows
 
     def resizeEvent(self, event):
         if hasattr(self, "image_label"):

@@ -1,4 +1,5 @@
 import cv2 as cv
+import os
 import numpy as np
 
 
@@ -7,26 +8,25 @@ def process_image(image_path):
     image = cv.imread(image_path)
 
     # Crop the image
-    cropped_image = crop_image(image)
+    cropped_image = cv.imread(crop_image(image))
+
+    return cropped_image
 
     # Cleans/sharpens the image
-    cleaned_image = clean_image(cropped_image)
+    # cleaned_image = clean_image(cropped_image)
 
     # TODO: Replace this with cleaned_image. Use cropped_image for testing
-    cv.imshow(cropped_image)
+    # cv.imshow("Cropped image", cropped_image)
+    # cv.waitKey(0)
+    # cv.destroyAllWindows
 
 
 def crop_image(image):
     """
     Crops the image.
     Input: Imread Mat object.
-    Output: Cropped image.
+    Output: Cropped image filepath.
     """
-    ###
-
-    # Load the image
-    image = cv.imread("thomp2.jpg")
-
     # Convert the image to grayscale
     gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 
@@ -62,21 +62,17 @@ def crop_image(image):
             # Append the cropped object to the list
             cropped_objects.append(cropped_object)
 
+    # Before saving the cropped object, ensure the "temp" folder exists
+    if not os.path.exists("temp"):
+        os.makedirs("temp")
+
     # Display or save the cropped objects
     for i, cropped_object in enumerate(cropped_objects):
         # cv.imshow(f"Cropped Object {i}", cropped_object)
-        cv.imwrite(f"cropped_object_{i}.jpg", cropped_object)
+        new_image_path = f"temp/cropped_object_{i}.jpg"
+        cv.imwrite(new_image_path, cropped_object)
 
-    # Display the original image with rectangles (optional)
-    for contour in contours:
-        x, y, w, h = cv.boundingRect(contour)
-        cv.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
-
-    cv.imshow("Object Detection", image)
-    cv.waitKey(0)
-    cv.destroyAllWindows()
-    ###
-    return image
+    return new_image_path
 
 
 def clean_image(image):
@@ -85,10 +81,10 @@ def clean_image(image):
     Input: Cropped Imread Mat object.
     Output: Cleaned image.
     """
-    # TODO: Ethan put code here
+    # TODO: Extra processing if necessary.
     pass
 
 
 if __name__ == "__main__":
-    image_path = "breadboard.jpg"
+    image_path = "thomp2.jpg"
     process_image(image_path)
