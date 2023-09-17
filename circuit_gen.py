@@ -8,7 +8,7 @@ def generateDiagram(circuitGraph, vcc: str):
         print("Invalid circuit: power and ground not connected")
         return None
 
-    with sch.Drawing(file="circuit_out.svg") as d:
+    with sch.Drawing(show=False,file="circuit_out.svg") as d:
         # create a vertical line from Vcc to ground using the shortest circuit path
         shortestPath = findShortestPath(circuitGraph, "POW", "GND")
         for node in shortestPath:
