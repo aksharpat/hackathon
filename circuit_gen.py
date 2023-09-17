@@ -150,28 +150,27 @@ def numComps(path):
 #draws a single circuit component in a given direction
 def drawComp(dir: str, comp: str, d: sch.Drawing):
     args = comp.split(' ')
-    match dir:
-        case "l":
-            if args[0] == "RES":
-                d += elm.Resistor().left().label(args[2])
-            elif args[0] == "CAP":
-                d += elm.Capacitor().left().label(args[2])                
-            elif args[0] == "IND":
-                d += elm.Inductor().left().label(args[2])                
-        case "r":
-            if args[0] == "RES":
-                d += elm.Resistor().right().label(args[2])
-            elif args[0] == "CAP":
-                d += elm.Capacitor().right().label(args[2])                
-            elif args[0] == "IND":
-                d += elm.Inductor().right().label(args[2])  
-        case "d":
-            if args[0] == "RES":
-                d += elm.Resistor().down().label(args[2])
-            elif args[0] == "CAP":
-                d += elm.Capacitor().down().label(args[2])                
-            elif args[0] == "IND":
-                d += elm.Inductor().down().label(args[2])  
+    if dir == "l":
+        if args[0] == "RES":
+            d += elm.Resistor().left().label(args[2])
+        elif args[0] == "CAP":
+            d += elm.Capacitor().left().label(args[2])                
+        elif args[0] == "IND":
+            d += elm.Inductor().left().label(args[2])                
+    elif dir ==  "r":
+        if args[0] == "RES":
+            d += elm.Resistor().right().label(args[2])
+        elif args[0] == "CAP":
+            d += elm.Capacitor().right().label(args[2])                
+        elif args[0] == "IND":
+            d += elm.Inductor().right().label(args[2])  
+    elif dir ==  "d":
+        if args[0] == "RES":
+            d += elm.Resistor().down().label(args[2])
+        elif args[0] == "CAP":
+            d += elm.Capacitor().down().label(args[2])                
+        elif args[0] == "IND":
+            d += elm.Inductor().down().label(args[2])  
         
             
 
