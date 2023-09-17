@@ -59,7 +59,7 @@ class LabelSceneWindow(QtWidgets.QDialog):
         self.image_label = QLabel("Labeled Image Display")
 
         # Load the image from 'temp' folder
-        pixmap = QtGui.QPixmap("temp/analyzed_image.jpg")
+        pixmap = QtGui.QPixmap("temp/analyzed_image.png")
         self.image_label.setPixmap(pixmap)
         self.image_label.setScaledContents(True)
 
